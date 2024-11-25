@@ -15,11 +15,13 @@ import { Search } from 'lucide-react';
 import { updateTicketStatus } from './actions';
 import debounce from 'lodash/debounce';
 import { toast } from 'sonner';
+import { QRScanner } from '@/components/ui/QRScanner';
 
 export default function GuestList() {
     const [guests, setGuests] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [isScannerOpen, setIsScannerOpen] = useState(false);
 
     const fetchGuests = async (query = '') => {
         try {
@@ -59,14 +61,18 @@ export default function GuestList() {
         }
     };
 
+    const handleScanSuccess = () => {
+        fetchGuests(searchQuery); // Refetch to update the list after successful scan
+    };
+
     return (
         <div className='min-h-screen bg-black text-white'>
             <div className='container mx-auto py-10 px-4'>
                 <h1 className='text-3xl md:text-4xl font-bold mb-6 text-center text-primary-600'>
                     Event: InspireCon'24
                 </h1>
-                <div className='mb-6'>
-                    <div className='relative'>
+                <div className='mb-6 flex gap-4 items-center'>
+                    <div className='relative flex-1'>
                         <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500' />
                         <Input
                             placeholder='Search by name, email, or ticket number'
@@ -75,6 +81,14 @@ export default function GuestList() {
                             className='pl-10 bg-gray-800 border-gray-700 text-white rounded-full'
                         />
                     </div>
+                    <Button
+                        variant={'default'}
+                        size='lg'
+                        onClick={() => setIsScannerOpen(true)}
+                        className='rounded-full w-full md:w-auto'
+                    >
+                        Scan
+                    </Button>
                 </div>
 
                 <div className='rounded-3xl border border-gray-700 overflow-hidden'>
@@ -191,6 +205,11 @@ export default function GuestList() {
                     </div>
                 </div>
             </div>
+            <QRScanner
+                isOpen={isScannerOpen}
+                onClose={() => setIsScannerOpen(false)}
+                onScanSuccess={handleScanSuccess}
+            />
         </div>
     );
 }
