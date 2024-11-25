@@ -13,6 +13,7 @@ export function QRScanner({ isOpen, onClose, onScanSuccess }) {
     const [isScanning, setIsScanning] = useState(true);
 
     const handleScan = async (result) => {
+        alert(result);
         if (result) {
             setIsScanning(false);
             try {
