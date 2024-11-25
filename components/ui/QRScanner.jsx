@@ -50,13 +50,15 @@ export function QRScanner({ isOpen, onClose, onScanSuccess }) {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        Scan QR Code{' '}
-                        {myResult.length > 0 ? myResult[0] : 'No Result'}
+                        Scan QR Code
+                        {myResult.length > 0
+                            ? myResult.map((a) => <p>{a}</p>)
+                            : ' No Result'}
                     </DialogTitle>
                 </DialogHeader>
-                {isScanning && (
+                {/* {isScanning && (
                     <Scanner onScan={handleScan} onError={handleError} />
-                )}
+                )} */}
             </DialogContent>
         </Dialog>
     );
