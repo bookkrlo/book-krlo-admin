@@ -10,33 +10,29 @@ import { toast } from 'sonner';
 import { updateTicketStatus } from '@/app/actions';
 
 export function QRScanner({ isOpen, onClose, onScanSuccess }) {
-    const [myResult, setMyResult] = useState([]);
     const [isScanning, setIsScanning] = useState(true);
 
     const handleScan = async (result) => {
-        setMyResult(Object.keys(result));
-        console.log('result', result);
-        alert(result);
-        // if (result) {
-        //     setIsScanning(false);
-        //     try {
-        //         const guestId = result; // Assuming the QR code contains the guest ID
-        //         const updateResult = await updateTicketStatus(guestId, true);
-        //         if (updateResult.success) {
-        //             alert('Success', result);
-        //             toast.success('Ticket marked as used');
-        //             onScanSuccess();
-        //         } else {
-        //             alert('Failed to Update', result);
-        //             toast.error('Failed to update ticket status');
-        //         }
-        //     } catch (error) {
-        //         alert('Error', result);
-        //         console.error('Error processing scan result:', error);
-        //         toast.error('Error processing scan result');
-        //     }
-        // onClose();
-        // }
+        if (result) {
+            setIsScanning(false);
+            try {
+                const ticket_number = result; // Assuming the QR code contains the guest ID
+                const updateResult = await updateTicketStatus(
+                    ticket_number,
+                    true
+                );
+                if (updateResult.success) {
+                    toast.success('Ticket marked as used');
+                    onScanSuccess();
+                } else {
+                    toast.error('Failed to update ticket status');
+                }
+            } catch (error) {
+                console.error('Error processing scan result:', error);
+                toast.error('Error processing scan result');
+            }
+            onClose();
+        }
     };
 
     const handleError = (error) => {
@@ -49,15 +45,14 @@ export function QRScanner({ isOpen, onClose, onScanSuccess }) {
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>
-                        Scan QR Code
-                        {myResult.length > 0
-                            ? myResult.map((a) => <p>{a}</p>)
-                            : ' No Result'}
-                    </DialogTitle>
+                    <DialogTitle>Scan QR Code</DialogTitle>
                 </DialogHeader>
                 {isScanning && (
-                    <Scanner onScan={handleScan} onError={handleError} />
+                    <Scanner
+                        onResult={handleScan}
+                        onError={handleError}
+                        constraints={{ facingMode: 'environment' }}
+                    />
                 )}
             </DialogContent>
         </Dialog>
