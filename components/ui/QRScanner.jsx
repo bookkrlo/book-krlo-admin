@@ -49,7 +49,7 @@ export function QRScanner({ isOpen, onClose, onScanSuccess }) {
                 </DialogHeader>
                 {isScanning && (
                     <Scanner
-                        onScan={handleScan}
+                        onScan={(result) => handleScan(result)}
                         onError={handleError}
                         constraints={{ facingMode: 'environment' }}
                     />
