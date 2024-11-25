@@ -56,9 +56,9 @@ export function QRScanner({ isOpen, onClose, onScanSuccess }) {
                             : ' No Result'}
                     </DialogTitle>
                 </DialogHeader>
-                {/* {isScanning && (
+                {isScanning && (
                     <Scanner onScan={handleScan} onError={handleError} />
-                )} */}
+                )}
             </DialogContent>
         </Dialog>
     );
