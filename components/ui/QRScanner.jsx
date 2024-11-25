@@ -10,9 +10,12 @@ import { toast } from 'sonner';
 import { updateTicketStatus } from '@/app/actions';
 
 export function QRScanner({ isOpen, onClose, onScanSuccess }) {
+    const [result, setResult] = useState('No Result');
     const [isScanning, setIsScanning] = useState(true);
 
     const handleScan = async (result) => {
+        setResult(result);
+        console.log('result', result);
         alert(result);
         if (result) {
             setIsScanning(false);
@@ -32,7 +35,7 @@ export function QRScanner({ isOpen, onClose, onScanSuccess }) {
                 console.error('Error processing scan result:', error);
                 toast.error('Error processing scan result');
             }
-            onClose();
+            // onClose();
         }
     };
 
@@ -46,7 +49,7 @@ export function QRScanner({ isOpen, onClose, onScanSuccess }) {
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Scan QR Code</DialogTitle>
+                    <DialogTitle>Scan QR Code {result}</DialogTitle>
                 </DialogHeader>
                 {isScanning && (
                     <Scanner onScan={handleScan} onError={handleError} />
